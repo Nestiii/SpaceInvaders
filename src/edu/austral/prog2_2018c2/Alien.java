@@ -6,6 +6,7 @@ abstract class Alien extends Sprite {
 
     private Bomb bomb;
     private static String alienImg;
+    private String type;
 
     public Alien(int x, int y,String image) {
 
@@ -34,6 +35,7 @@ abstract class Alien extends Sprite {
 
         return bomb;
     }
+    abstract String getType();
 
     public class Bomb extends Sprite {
 
