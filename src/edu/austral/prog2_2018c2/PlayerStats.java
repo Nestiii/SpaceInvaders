@@ -1,7 +1,7 @@
 package edu.austral.prog2_2018c2;
 
 public class PlayerStats {
-    private int lives = 0;
+    private int lives = 3;
     private int shield = 0;
 
     public void setLives(int lives) {

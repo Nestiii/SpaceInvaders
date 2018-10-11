@@ -20,7 +20,10 @@ public class Board extends JPanel implements Runnable, Commons {
     private Shot shot;
 
     private final int ALIEN_INIT_X = 40;
+
     private final int ALIEN_INIT_Y = 5;
+    private final int MALIEN_INIT_Y = 23;
+    private final int BALIEN_INIT_Y = 59;
     private int direction = -1;
     private int deaths = 0;
 
@@ -65,21 +68,21 @@ public class Board extends JPanel implements Runnable, Commons {
 
         aliens = new ArrayList<>();
 
-        for (int i = 0; i < 1; i++) {
-            for (int j = 0; j < 6; j++) {
-                    SmallAlien alien = new SmallAlien(ALIEN_INIT_X + 18 * j, ALIEN_INIT_Y + 18 * i);
+
+        for (int j = 0; j < 6; j++) {
+                    SmallAlien alien = new SmallAlien(ALIEN_INIT_X + 18*j, ALIEN_INIT_Y);
                     aliens.add(alien);
                 }
-            }
-        for (int i = 1; i < 2; i++) {
+
+        for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 6; j++) {
-                MedAlien alien = new MedAlien(ALIEN_INIT_X + 18 * j, ALIEN_INIT_Y + 18 * i);
+                MedAlien alien = new MedAlien(ALIEN_INIT_X + 18 * j, MALIEN_INIT_Y + 18*i);
                 aliens.add(alien);
             }
         }
-        for (int i = 2; i < 4; i++) {
+        for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 6; j++) {
-                BigAlien alien = new BigAlien(ALIEN_INIT_X + 18 * j, ALIEN_INIT_Y + 18 * i);
+                BigAlien alien = new BigAlien(ALIEN_INIT_X + 18 * j, BALIEN_INIT_Y + 18 * i);
                 aliens.add(alien);
             }
         }
