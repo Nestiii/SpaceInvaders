@@ -14,13 +14,15 @@ import javax.swing.JPanel;
 
 public class Board extends JPanel implements Runnable, Commons {
 
+
+
     private Dimension d;
     private ArrayList<Alien> aliens;
+    private ArrayList<Shield> shields;
     private Player player;
     private Shot shot;
-
+    private final int SHIELD_INIT_Y = 230;
     private final int ALIEN_INIT_X = 40;
-
     private final int ALIEN_INIT_Y = 5;
     private final int MALIEN_INIT_Y = 23;
     private final int BALIEN_INIT_Y = 59;
@@ -67,7 +69,8 @@ public class Board extends JPanel implements Runnable, Commons {
     public void gameInit() {
 
         aliens = new ArrayList<>();
-
+        shields = new ArrayList<>();
+        initShields();
 
         for (int j = 0; j < 6; j++) {
                     SmallAlien alien = new SmallAlien(ALIEN_INIT_X + 18*j, ALIEN_INIT_Y);
@@ -99,6 +102,19 @@ public class Board extends JPanel implements Runnable, Commons {
                 animator.start();
             }
         }
+
+    private void initShields() {
+        int shieldsAmount = actualLevel.getShields();
+        int spacing = BOARD_WIDTH/(shieldsAmount+1);
+
+
+        for (int i = 0; i < shieldsAmount; i++) {
+            Shield shield = new Shield( spacing-20 + spacing*i, SHIELD_INIT_Y);
+            shields.add(shield);
+
+        }
+
+    }
 
 
     public void drawAliens(Graphics g) {
@@ -154,6 +170,13 @@ public class Board extends JPanel implements Runnable, Commons {
             }
         }
     }
+    private void drawShields(Graphics g) {
+        for (int i = 0; i < shields.size(); i++) {
+            Shield shield = shields.get(i);
+             g.drawImage(shield.getImage(),shield.getX(),shield.getY(),this);
+
+        }
+    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -170,11 +193,13 @@ public class Board extends JPanel implements Runnable, Commons {
             drawPlayer(g);
             drawShot(g);
             drawBombing(g);
+            drawShields(g);
         }
 
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
     }
+
 
     public void gameOver() {
 
@@ -228,7 +253,6 @@ public class Board extends JPanel implements Runnable, Commons {
             ingame = false;
             message = "Game won!";
         }
-
         if (deaths == NUMBER_OF_ALIENS_TO_DESTROY && levelList.indexOf(actualLevel) < levelList.size() - 1) {
             deaths = 0;
             actualLevel = levelList.get(levelList.indexOf(actualLevel) + 1);
@@ -272,6 +296,11 @@ public class Board extends JPanel implements Runnable, Commons {
                             ImageIcon ii
                                     = new ImageIcon(explImg);
                             alien.setImage(ii.getImage());
+                            try {
+                                Thread.sleep(50);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                             alien.setDying(true);
                             deaths++;
                             shot.die();
