@@ -36,6 +36,7 @@ public class Board extends JPanel implements Runnable, Commons {
     private List<Level> levelList =new ArrayList<>();
 
     private Thread animator;
+    private int score;
 
     public Board() {
         levelList.add(LEVEL1);
@@ -246,8 +247,6 @@ public class Board extends JPanel implements Runnable, Commons {
 
     public void animationCycle() {
 
-        System.out.println(levelList.indexOf(actualLevel));
-
         if (deaths == NUMBER_OF_ALIENS_TO_DESTROY && levelList.indexOf(actualLevel) == levelList.size() - 1) {
 
             ingame = false;
@@ -262,8 +261,7 @@ public class Board extends JPanel implements Runnable, Commons {
             catch (InterruptedException exc){
 
             }
-
-            print("Level "+(levelList.indexOf(actualLevel)+1));
+            print("Level "+(levelList.indexOf(actualLevel)+1)+"   Score: "+score);
             try {
                 Thread.sleep(4000);
             }
@@ -304,6 +302,19 @@ public class Board extends JPanel implements Runnable, Commons {
                             alien.setDying(true);
                             deaths++;
                             shot.die();
+                            System.out.println(alien.getType());
+                            switch (alien.getType()){
+                                case "MedAlien":    score+=MEDALIEN_POINTS;
+                                                    break;
+                                case "BigAlien":    score+=BIGALIEN_POINTS;
+                                                    break;
+                                case "SmallAlien":  score+=SMALLALIEN_POINTS;
+                                                    break;
+                                case "UFO":         double randomNum = Math.random()*250+50;
+                                                    score+=(int)randomNum;
+                                                    break;
+
+                            }
                         }
                     }
                 }
