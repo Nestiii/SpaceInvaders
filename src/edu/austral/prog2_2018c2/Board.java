@@ -380,7 +380,7 @@ public class Board extends JPanel implements Runnable, Commons {
 
                     if (y > GROUND - ALIEN_HEIGHT) {
                         ingame = false;
-                        message = "Invasion!";
+                        message = "Invasion! Score "+score;
                     }
 
                     alien.act(direction);
