@@ -23,6 +23,7 @@ public class PlayerStats {
     public void substractLive(){
         lives--;
     }
+
     public void substractShield(){
         shield--;
     }

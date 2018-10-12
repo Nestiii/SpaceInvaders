@@ -28,6 +28,7 @@ public class Board extends JPanel implements Runnable, Commons {
     private final int BALIEN_INIT_Y = 59;
     private int direction = -1;
     private int deaths = 0;
+    private int score;
 
     private boolean ingame = true;
     private final String explImg = "src/images/explosion.png";
@@ -36,7 +37,6 @@ public class Board extends JPanel implements Runnable, Commons {
     private List<Level> levelList =new ArrayList<>();
 
     private Thread animator;
-    private int score;
 
     public Board() {
         levelList.add(LEVEL1);
@@ -91,7 +91,6 @@ public class Board extends JPanel implements Runnable, Commons {
             }
         }
 
-
             player = new Player();
             player.getStats().setShield(actualLevel.getShields());
             shot = new Shot();
@@ -120,8 +119,6 @@ public class Board extends JPanel implements Runnable, Commons {
 
     public void drawAliens(Graphics g) {
 
-        Iterator it = aliens.iterator();
-
         for (Alien alien: aliens) {
 
             if (alien.isVisible()) {
@@ -146,6 +143,7 @@ public class Board extends JPanel implements Runnable, Commons {
         if (player.isDying()) {
 
             player.die();
+            message = "Game over  Score: "+score;
             ingame = false;
         }
     }
@@ -172,10 +170,20 @@ public class Board extends JPanel implements Runnable, Commons {
         }
     }
     private void drawShields(Graphics g) {
-        for (int i = 0; i < shields.size(); i++) {
-            Shield shield = shields.get(i);
-             g.drawImage(shield.getImage(),shield.getX(),shield.getY(),this);
 
+        for (int i = 0; i < shields.size(); i++) {
+
+            if (shields.get(i).isVisible()) {
+
+                Shield shield = shields.get(i);
+
+                g.drawImage(shield.getImage(), shield.getX(), shield.getY(), this);
+            }
+
+            if (shields.get(i).isDying()) {
+
+                shields.get(i).die();
+            }
         }
     }
 
@@ -250,7 +258,7 @@ public class Board extends JPanel implements Runnable, Commons {
         if (deaths == NUMBER_OF_ALIENS_TO_DESTROY && levelList.indexOf(actualLevel) == levelList.size() - 1) {
 
             ingame = false;
-            message = "Game won!";
+            message = "Game won!   Final Score: "+score;
         }
         if (deaths == NUMBER_OF_ALIENS_TO_DESTROY && levelList.indexOf(actualLevel) < levelList.size() - 1) {
             deaths = 0;
@@ -270,7 +278,6 @@ public class Board extends JPanel implements Runnable, Commons {
             }
             gameInit();
         }
-
 
             // player
             player.act();
@@ -416,6 +423,39 @@ public class Board extends JPanel implements Runnable, Commons {
                         player.getHit();
                         player.setImage(i2.getImage());
 
+                    }
+                }
+                for (int i = 0; i <shields.size() ; i++) {
+
+                    if (shields.get(i).isVisible() && !b.isDestroyed()) {
+
+                        if (bombX >= (shields.get(i).getX())
+                                && bombX <= (shields.get(i).getX() + SHIELD_WIDTH)
+                                && bombY >= (shields.get(i).getY())
+                                && bombY <= (shields.get(i).getY() + SHIELD_HEIGHT)) {
+
+
+                            shields.get(i).receiveShot();
+                            b.setDestroyed(true);
+
+
+
+                        }
+                    }
+                }
+
+                for (int i = 0; i <shields.size() ; i++) {
+
+                    if (shields.get(i).isVisible() && !b.isDestroyed()) {
+
+                        if (alien.getX() >= (shields.get(i).getX())
+                                && alien.getX() <= (shields.get(i).getX() + SHIELD_WIDTH)
+                                && alien.getY() >= (shields.get(i).getY())
+                                && alien.getY() <= (shields.get(i).getY() + SHIELD_HEIGHT)) {
+
+                            shields.get(i).setDying(true);
+
+                        }
                     }
                 }
 
