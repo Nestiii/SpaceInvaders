@@ -26,9 +26,8 @@ abstract class Alien extends Sprite {
         setImage(ii.getImage());
     }
 
-    public void act(int direction) {
-
-        this.x += direction;
+    public void act(double direction) {
+        this.x +=direction;
     }
 
     public Bomb getBomb() {

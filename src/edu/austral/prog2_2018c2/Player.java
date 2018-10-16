@@ -83,10 +83,8 @@ public class Player extends Sprite implements Commons {
     }
 
     public void getHit() {
-        if (stats.getShield()>0) {
-            stats.substractShield();
-        }
-        if (stats.getLives()>0 && stats.getShield()==0) {
+
+        if (stats.getLives()>0) {
             stats.substractLive();
         }
         if (stats.getLives()==0){
