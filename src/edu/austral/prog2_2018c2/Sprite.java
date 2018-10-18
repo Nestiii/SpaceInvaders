@@ -70,4 +70,7 @@ public class Sprite {
 
         return this.dying;
     }
+    public void setDx(int newDx){
+        dx = newDx;
+    }
 }

@@ -1,8 +1,10 @@
 package edu.austral.prog2_2018c2;
 
+import java.util.List;
+
 public class Level {
 
-    public int shields;
+    int shields;
     public int movementSpeed;
 
     public Level(int shields,int movementSpeed){
