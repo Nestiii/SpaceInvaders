@@ -196,13 +196,18 @@ public class Board extends JPanel implements Runnable, Commons {
         g.setColor(Color.green);
 
         if (ingame) {
-
             g.drawLine(0, GROUND, BOARD_WIDTH, GROUND);
             drawAliens(g);
             drawPlayer(g);
             drawShot(g);
             drawBombing(g);
             drawShields(g);
+            g.setColor(Color.white);
+            g.setFont(new Font("text",Font.PLAIN,13));
+            g.drawString("Lives: "+player.getStats().getLives(),10,15);
+            g.drawString("Level: "+actualLevel.getNum(),BOARD_WIDTH/4,15);
+            g.drawString("Score: "+score,4*BOARD_WIDTH/9,15);
+            g.drawString("Aliens killed: "+deaths+"/"+NUMBER_OF_ALIENS_TO_DESTROY,2*BOARD_WIDTH/3-10,15);
         }
 
         Toolkit.getDefaultToolkit().sync();
@@ -243,13 +248,24 @@ public class Board extends JPanel implements Runnable, Commons {
         g.setColor(Color.white);
         g.drawRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
 
+        g.setColor(Color.white);
+
         Font small = new Font("Helvetica", Font.BOLD, 14);
         FontMetrics metr = this.getFontMetrics(small);
 
         g.setColor(Color.white);
         g.setFont(small);
-        g.drawString(message, (BOARD_WIDTH - metr.stringWidth(message)) / 2,
-                BOARD_WIDTH / 2);
+        g.drawString(message, (BOARD_WIDTH - metr.stringWidth(message)) / 2, BOARD_WIDTH / 2);
+
+    }
+
+    public void printString(String message){
+
+        Graphics g = this.getGraphics();
+        g.setColor(Color.white);
+        Font font = new Font("asd",Font.PLAIN,10);
+        g.setFont(font);
+        g.drawString(message,10,0);
 
     }
 
@@ -278,7 +294,6 @@ public class Board extends JPanel implements Runnable, Commons {
             }
             gameInit();
         }
-
             // player
             player.act();
 
@@ -383,7 +398,15 @@ public class Board extends JPanel implements Runnable, Commons {
                         message = "Invasion! Score "+score;
                     }
 
-                    alien.act(direction);
+                    if (direction==-1){
+                        System.out.println(direction+actualLevel.getMovementSpeed());
+                        alien.act(direction + actualLevel.getMovementSpeed());
+
+                    }else {
+                        System.out.println(direction+actualLevel.getMovementSpeed());
+                        alien.act(direction + actualLevel.getMovementSpeed());
+
+                    }
                 }
             }
 
@@ -484,7 +507,7 @@ public class Board extends JPanel implements Runnable, Commons {
             animationCycle();
 
             timeDiff = System.currentTimeMillis() - beforeTime;
-            sleep = actualLevel.getMovementSpeed() - timeDiff;
+            sleep = DELAY - timeDiff;
 
             if (sleep < 0) {
                 sleep = 2;

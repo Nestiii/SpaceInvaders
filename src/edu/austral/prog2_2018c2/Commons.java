@@ -15,16 +15,16 @@ public interface Commons {
     public static final int GO_DOWN = 15;
     public static final int NUMBER_OF_ALIENS_TO_DESTROY = 24;
     public static final int CHANCE = 5;
-//    public static final int DELAY = 17;
+    public static final int DELAY = 17;
     public static final int PLAYER_WIDTH = 15;
     public static final int PLAYER_HEIGHT = 10;
     public static final int LIVES = 3;
 
-    public static final Level LEVEL1 = new Level(5,17);
-    public static final Level LEVEL2 = new Level(4,15);
-    public static final Level LEVEL3 = new Level(3,13);
-    public static final Level LEVEL4 = new Level(2,11);
-    public static final Level LEVEL5 = new Level(1,9);
+    public static final Level LEVEL1 = new Level(1,4,0.2);
+    public static final Level LEVEL2 = new Level(2,3,0.4);
+    public static final Level LEVEL3 = new Level(3,2,0.6);
+    public static final Level LEVEL4 = new Level(4,1,0.8);
+    public static final Level LEVEL5 = new Level(5,0,0.99);
 
     public static final int BIGALIEN_POINTS = 10;
     public static final int MEDALIEN_POINTS = 20;
