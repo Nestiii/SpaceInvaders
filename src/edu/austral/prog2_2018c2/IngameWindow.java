@@ -3,19 +3,18 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class IngameWindow extends JPanel implements Commons {
     private Dimension d;
+    private Graphics g;
 
 
-    public void drawAliens(Graphics g, List<Alien> aliens) {
+    public void drawAliens(List<Alien> aliens) {
 
         for (Alien alien: aliens) {
 
@@ -31,7 +30,7 @@ public class IngameWindow extends JPanel implements Commons {
         }
     }
 
-    public void drawPlayer(Graphics g, Player player) {
+    public void drawPlayer(Player player) {
 
         if (player.isVisible()) {
 
@@ -46,7 +45,7 @@ public class IngameWindow extends JPanel implements Commons {
         }
     }
 
-    public void drawShot(Graphics g, Shot shot) {
+    public void drawShot(Shot shot) {
 
         if (shot.isVisible()) {
 
@@ -55,7 +54,7 @@ public class IngameWindow extends JPanel implements Commons {
 
     }
 
-    public void drawBombing(Graphics g, List<Alien> aliens) {
+    public void drawBombing(List<Alien> aliens) {
 
         for (Alien a : aliens) {
 
@@ -67,7 +66,7 @@ public class IngameWindow extends JPanel implements Commons {
             }
         }
     }
-    private void drawShields(Graphics g, List<Shield> shields) {
+    private void drawShields(List<Shield> shields) {
 
         for (int i = 0; i < shields.size(); i++) {
 

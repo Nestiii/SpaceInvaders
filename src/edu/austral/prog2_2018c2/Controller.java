@@ -45,11 +45,10 @@ public class Controller {
 
                 if (ingame) {
                     ingameWindow.drawShot(new Shot(x, y));
-                    }
+
                 }
             }
         }
     }
-}
 }
 
