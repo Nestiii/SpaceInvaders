@@ -586,13 +586,12 @@ public class Board extends JPanel implements Runnable, Commons {
 
         }
         if (player.getStats().isImmune()){
-            System.out.println("aaaaaa");
-            System.out.println(inPower);
+            System.out.println("inmune");
+
         }
         if (inPower && System.currentTimeMillis()-(powerTime) >= powerLength*1000){
             inPower = false;
             powersOff();
-            System.out.println("off");
         }
     }
 
