@@ -4,8 +4,10 @@ import java.awt.*;
 import javax.swing.JFrame;
 
 public class SpaceInvaders extends JFrame implements Commons {
+    private Controller controller;
 
     public SpaceInvaders() {
+        controller = new Controller(new Model(),new IngameWindow());
 
         initUI();
     }
