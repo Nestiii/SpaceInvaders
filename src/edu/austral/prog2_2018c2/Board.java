@@ -572,10 +572,10 @@ public class Board extends JPanel implements Runnable, Commons {
                 freezePower();
 
             } else if ((int) random < 30) {
-                freezePower();
+                immunityPower();
 
             }else{
-                freezePower();
+                doubleShotPower();
 
             }
             player.getStats().resetConsecutiveShots();
@@ -612,7 +612,7 @@ public class Board extends JPanel implements Runnable, Commons {
         direction =0;
 
     }
-    public void doubleShotPower(){
+    public void doubleShotPower(){//hacer
 
     }
 
