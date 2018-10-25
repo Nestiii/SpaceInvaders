@@ -34,7 +34,7 @@ public class PlayerStats {
         consecutiveShots++;
     }
 
-    public int getAcertedShots(){
+    public int getConsecutiveShots(){
         return consecutiveShots;
     }
 
