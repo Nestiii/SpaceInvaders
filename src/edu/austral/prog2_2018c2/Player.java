@@ -84,7 +84,7 @@ public class Player extends Sprite implements Commons {
 
     public void getHit() {
 
-        if (stats.getLives()>0) {
+        if (stats.getLives()>0 && !stats.isImmune()) {
             stats.substractLive();
         }
         if (stats.getLives()==0){

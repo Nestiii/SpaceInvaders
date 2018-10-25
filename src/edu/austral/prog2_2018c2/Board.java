@@ -27,12 +27,16 @@ public class Board extends JPanel implements Runnable, Commons {
     private final int ALIEN_INIT_Y = 5;
     private final int MALIEN_INIT_Y = 23;
     private final int BALIEN_INIT_Y = 59;
-    private int ufodirection =-1;
+    private int ufodirection =1;
     private int direction = -1;
     private int deaths = 0;
     private int score;
     private long initialTime;
     private int ufoTime;
+    private boolean inPower;
+    private long powerTime;
+    private int powerLength;
+    private int lastDirection;
 
     private boolean ingame = true;
     private final String explImg = "src/images/explosion.png";
@@ -279,15 +283,6 @@ public class Board extends JPanel implements Runnable, Commons {
 
     }
 
-    public void printString(String message){
-
-        Graphics g = this.getGraphics();
-        g.setColor(Color.white);
-        Font font = new Font("asd",Font.PLAIN,10);
-        g.setFont(font);
-        g.drawString(message,10,0);
-
-    }
 
     public void animationCycle() {
 
@@ -321,6 +316,22 @@ public class Board extends JPanel implements Runnable, Commons {
             int shotX = shot.getX();
             int shotY = shot.getY();
 
+            for (int i = 0; i < shields.size(); i++) {
+                int shieldx = shields.get(i).getX();
+                int shieldy = shields.get(i).getY();
+
+                if (shields.get(i).isVisible() && shot.isVisible()) {
+                    if (shotX >= (shieldx)
+                            && shotX <= (shieldx + SHIELD_WIDTH)
+                            && shotY >= (shieldy)
+                            && shotY <= (shieldy + SHIELD_HEIGHT)) {
+                        shot.die();
+                        player.getStats().resetConsecutiveShots();
+                    }
+                }
+
+            }
+
 
             for (Alien alien : aliens) {
 
@@ -343,18 +354,21 @@ public class Board extends JPanel implements Runnable, Commons {
                         alien.setDying(true);
                         deaths++;
                         shot.die();
-
+                        if (!inPower) {
+                            player.getStats().addConsecutiveShot();
+                            System.out.println(player.getStats().getAcertedShots());
+                        }
                         switch (alien.getType()) {
                             case "MedAlien":
-                                System.out.println(MEDALIEN_POINTS);
+
                                 score += MEDALIEN_POINTS;
                                 break;
                             case "BigAlien":
-                                System.out.println(BIGALIEN_POINTS);
+
                                 score += BIGALIEN_POINTS;
                                 break;
                             case "SmallAlien":
-                                System.out.println(SMALLALIEN_POINTS);
+
                                 score += SMALLALIEN_POINTS;
                                 break;
                         }
@@ -362,14 +376,17 @@ public class Board extends JPanel implements Runnable, Commons {
                 }
             }
 
+
             int y = shot.getY();
             y -= 4;
 
             if (y < 0) {
+                player.getStats().resetConsecutiveShots();
                 shot.die();
             } else {
                 shot.setY(y);
             }
+
         }
 
         // aliens
@@ -418,15 +435,16 @@ public class Board extends JPanel implements Runnable, Commons {
                     ingame = false;
                     message = "Invasion! Score " + score;
                 }
+                if (direction!=0) {
+                    if (direction == -1) {
 
-                if (direction == -1) {
+                        alien.act(direction - actualLevel.getMovementSpeed());
 
-                    alien.act(direction - actualLevel.getMovementSpeed());
+                    } else {
 
-                } else {
+                        alien.act(direction + actualLevel.getMovementSpeed());
 
-                    alien.act(direction + actualLevel.getMovementSpeed());
-
+                    }
                 }
             }
         }
@@ -469,6 +487,7 @@ public class Board extends JPanel implements Runnable, Commons {
 
                 }
             }
+
             for (int i = 0; i < shields.size(); i++) {
 
                 if (shields.get(i).isVisible() && !b.isDestroyed()) {
@@ -522,54 +541,79 @@ public class Board extends JPanel implements Runnable, Commons {
 
             int x = ufo.getX();
 
-            if (x >= BOARD_WIDTH - BORDER_RIGHT && ufodirection != -1) {
+            if (x >= BOARD_WIDTH - BORDER_RIGHT) {
 
-                ufodirection = -1;
+                ufo.die();
 
-                ufo.setY(ufo.getY() + GO_DOWN);
             }
 
-            if (x <= BORDER_LEFT && ufodirection != 1) {
-
-                ufodirection = 1;
-
-                ufo.setY(ufo.getY() + GO_DOWN);
-            }
-
-            if (ufo.isVisible()) {
-
-                int y = ufo.getY();
-
-                if (y > GROUND - ALIEN_HEIGHT) {
-                    ingame = false;
-                    message = "Invasion! Score " + score;
-                }
-
-                if (ufodirection == -1) {
-
-                    ufo.act(ufodirection - actualLevel.getMovementSpeed());
-
-                } else {
-
-                    ufo.act(ufodirection + actualLevel.getMovementSpeed());
-
-                }
-            }
+            ufo.act(ufodirection);
 
             if (shot.isVisible()) {
 
                 int shotX = shot.getX();
                 int shotY = shot.getY();
                 if (ufo.isVisible() && shot.isVisible()) {
-                    if (shotX >= (ufo.getX()) && shotX <= (ufo.getX() + ALIEN_WIDTH) && shotY >= (ufo.getY()) && shotY <= (ufo.getY() + ALIEN_HEIGHT)) {
+                    if (shotX >= (ufo.getX()) && shotX <= (ufo.getX() + UFO_WIDTH) && shotY >= (ufo.getY()) && shotY <= (ufo.getY() + UFO_HEIGHT)) {
                         ufo.setDying(true);
                         shot.die();
                         double random = Math.random() * 250 + 50;
                         score += (int) random;
+                        player.getStats().addConsecutiveShot();
                     }
                 }
             }
         }
+
+        if (player.getStats().getAcertedShots() == 4 && !inPower) {
+            double random = Math.random() * 100;
+
+            if ((int) random < 10) {
+                freezePower();
+
+            } else if ((int) random < 30) {
+                freezePower();
+
+            }else{
+                freezePower();
+
+            }
+            player.getStats().resetConsecutiveShots();
+            inPower = true;
+            powerTime = System.currentTimeMillis();
+            double random2 = Math.random()*3+3;
+            powerLength = (int)random2;
+
+        }
+        if (player.getStats().isImmune()){
+            System.out.println("aaaaaa");
+            System.out.println(inPower);
+        }
+        if (inPower && System.currentTimeMillis()-(powerTime) >= powerLength*1000){
+            inPower = false;
+            powersOff();
+            System.out.println("off");
+        }
+    }
+
+    public void powersOff(){
+        player.getStats().setImmunity(false);
+        if (direction==0){
+            direction = lastDirection;
+        }
+    }
+
+    public void immunityPower(){
+        player.getStats().setImmunity(true);
+
+    }
+    public void freezePower(){
+        lastDirection = direction;
+        direction =0;
+
+    }
+    public void doubleShotPower(){
+
     }
 
     @Override
