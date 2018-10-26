@@ -2,17 +2,17 @@ package edu.austral.prog2_2018c2;
 
 import javax.swing.ImageIcon;
 
-abstract class Alien extends Sprite {
+class Alien extends Sprite {
 
     private Bomb bomb;
     private static String alienImg;
     private String type;
 
-    public Alien(int x, int y,String image) {
+    public Alien(int x, int y,String image,String type) {
 
         initAlien(x, y);
-
         alienImg = image;
+        this.type=type;
 
     }
 
@@ -34,7 +34,9 @@ abstract class Alien extends Sprite {
 
         return bomb;
     }
-    abstract String getType();
+    public String getType(){
+        return type;
+    }
 
     public class Bomb extends Sprite {
 
@@ -65,5 +67,6 @@ abstract class Alien extends Sprite {
 
             return destroyed;
         }
+
     }
 }
