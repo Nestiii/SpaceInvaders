@@ -264,17 +264,7 @@ public class Board extends JPanel implements Runnable, Commons {
         g.setFont(small);
         g.drawString(message, (BOARD_WIDTH - metr.stringWidth(message)) / 2,
                 BOARD_WIDTH / 2);
-        Ranking ranking = new Ranking();
-        List<Ranking.Score> highscores = ranking.getRanking();
-        g.setColor(Color.green);
-        g.setFont(new Font("asd",Font.PLAIN,20));
-        g.drawLine(20,20,118,20);
-        g.drawString("Highscores:",20,18);
-        g.setColor(Color.white);
-        g.setFont(small);
-        for (int i = 0; i <highscores.size() ; i++) {
-            g.drawString(highscores.get(i).getName()+ "   " + highscores.get(i).getPoints(),20,15*i+35);
-        }
+        drawHighscores(g);
 
     }
 
@@ -301,6 +291,20 @@ public class Board extends JPanel implements Runnable, Commons {
 
     }
 
+    public void drawHighscores(Graphics g){
+        Ranking ranking = new Ranking();
+        List<Ranking.Score> highscores = ranking.getRanking();
+        g.setColor(Color.green);
+        g.setFont(new Font("asd",Font.PLAIN,20));
+        g.drawLine(20,20,118,20);
+        g.drawString("Highscores:",20,18);
+        g.setColor(Color.white);
+        g.setFont(new Font("a",Font.ITALIC,14));
+        for (int i = 0; i <highscores.size() ; i++) {
+            g.drawString(highscores.get(i).getName()+ "   " + highscores.get(i).getPoints(),20,15*i+35);
+        }
+    }
+
 
     public void animationCycle() {
 
@@ -308,6 +312,8 @@ public class Board extends JPanel implements Runnable, Commons {
 
             ingame = false;
             message = "Game won!   Final Score: " + score;
+            Graphics g = this.getGraphics();
+            drawHighscores(g);
         }
         if (deaths == NUMBER_OF_ALIENS_TO_DESTROY && levelList.indexOf(actualLevel) < levelList.size() - 1) {
             deaths = 0;
