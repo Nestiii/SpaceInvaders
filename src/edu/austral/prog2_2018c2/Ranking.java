@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Ranking {
-    private String fileName = "F:\\Escritorio\\SpaceInvadersF\\src\\Ranking.txt";
+    private String fileName = "C:\\Users\\agusd\\Desktop\\SpaceInvaders\\src\\Ranking.txt";
     private List<Score> ranking;
     private int rankingSize = 10;
     private String delimiter = "-";

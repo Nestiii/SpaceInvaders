@@ -303,6 +303,7 @@ public class Board extends JPanel implements Runnable, Commons {
         for (int i = 0; i <highscores.size() ; i++) {
             g.drawString(highscores.get(i).getName()+ "   " + highscores.get(i).getPoints(),20,15*i+35);
         }
+
     }
 
 

@@ -25,7 +25,7 @@ public class SpaceInvaders extends JFrame implements Commons {
 
         button = new JButton();
         button.setFocusable(false);
-        button.setIcon(new ImageIcon("src/images/StartButton.jpg"));
+        button.setIcon(new ImageIcon("src/images/PlayButton.png"));
         button.setBorderPainted(false);
         button.setBackground(Color.white);
 
@@ -43,13 +43,18 @@ public class SpaceInvaders extends JFrame implements Commons {
         setLocationRelativeTo(null);
         setResizable(false);
         button.setLayout(null);
+        button.setOpaque(false);
+        button.setFocusPainted(false);
+        JLabel title = new JLabel(new ImageIcon("src/images/Title.png"));
+        title.setBackground(Color.BLACK);
+        panel.add(title);
         panel.add(button);
         add(panel);
 
 
 
     }
-
+//java -jar FileName.jar server/client
     public static void main(String[] args) {
 
         EventQueue.invokeLater(() -> {
