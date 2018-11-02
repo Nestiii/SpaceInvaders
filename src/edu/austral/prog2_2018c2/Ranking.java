@@ -2,25 +2,25 @@ package edu.austral.prog2_2018c2;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Ranking {
     private String fileName = "F:\\Escritorio\\SpaceInvadersF\\src\\Ranking.txt";
-    static StringBuffer stringBufferOfData = new StringBuffer();
     private List<Score> ranking;
     private int rankingSize = 10;
     private String delimiter = "-";
 
     public Ranking() {
         ranking = new ArrayList<>(rankingSize);
-        BufferedReader rankingBuffered = null;
+        BufferedReader Reader = null;
         FileReader rankingReader = null;
         try {
             rankingReader = new FileReader(fileName);
-            rankingBuffered = new BufferedReader(rankingReader);
+            Reader = new BufferedReader(rankingReader);
             String strCurrentLine;
 
-            while ((strCurrentLine = rankingBuffered.readLine()) != null) {
+            while ((strCurrentLine = Reader.readLine()) != null) {
 
                 Score temp;
                 String[] parts = strCurrentLine.split(delimiter);
@@ -29,55 +29,67 @@ public class Ranking {
                 temp = new Score(name, score);
                 ranking.add(temp);
             }
+            ranking.sort(Comparator.comparingDouble(Score::getPoints).reversed());
 
-            rankingBuffered.close();
+            Reader.close();
         } catch (IOException e) {
             System.out.println("File not Found");
         }
     }
 
-    public void addScore(Score score){
-        if (isHighScore(score)){
+    public void addScore(Score score) {
+        if (isHighScore(score)) {
+            int points = score.getPoints();
+            FileWriter fileWriter = null;
+            BufferedWriter writer = null;
+            int temp =0;
 
-            String oldContent = ranking.get(ranking.size()-1).getName()+"-"+ranking.get(ranking.size()-1).getPoints();
-            ranking.remove(ranking.get(ranking.size()-1));
+            try {
+                fileWriter = new FileWriter(fileName, true);
+                writer = new BufferedWriter(fileWriter);
+                writer.newLine();
+                writer.write("asd" + "-" + "24");
+                writer.flush();
 
-            BufferedReader reader = null;
-
-            FileWriter writer = null;
-
-            try
-            {
-                reader = new BufferedReader(new FileReader(fileName));
-                String line = reader.readLine();
-
-                while (line != null)
-                {
-                    oldContent = oldContent + line + System.lineSeparator();
-                    line = reader.readLine();
-                }
-
-                String newContent = oldContent.replaceAll(oldContent, score.getName()+"-"+score.getPoints());
-                writer = new FileWriter(fileName);
-                writer.write(newContent);
+            } catch (IOException e) {
 
             }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-
         }
     }
-    public void replaceScore(Score score) {
 
-        String lineToEdit = ranking.get(ranking.size()-1).getName()+"-"+ ranking.get(ranking.size()-1).getPoints();
-        String replacementText = score.getName()+"-"+score.getPoints();
+    public void deleteWorstScore(){
+        String inputFileName = fileName;
+        String outputFileName = "F:\\Escritorio\\SpaceInvadersF\\src\\temp.txt";
+        String lineToRemove = ranking.get(ranking.size()-1).getName()+"-"+ranking.get(ranking.size()-1).getPoints();
 
-        int startIndex = stringBufferOfData.indexOf(lineToEdit);
-        int endIndex = startIndex + lineToEdit.length();
-        stringBufferOfData.replace(startIndex, endIndex, replacementText);
-        System.out.println("Here is the new edited text:\n" + stringBufferOfData);
+        try {
+            File inputFile = new File(inputFileName);
+            File outputFile = new File(outputFileName);
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+                 BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    if (!line.equals(lineToRemove)) {
+                        writer.write(line);
+                        writer.newLine();
+                    }
+                }
+            }
+
+            if (inputFile.delete()) {
+
+                if (!outputFile.renameTo(inputFile)) {
+                    throw new IOException("Could not rename " + outputFileName + " to " + inputFileName);
+                }
+            } else {
+                throw new IOException("Could not delete original input file " + inputFileName);
+            }
+        } catch (IOException ex) {
+
+            ex.printStackTrace();
+        }
     }
 
     public boolean isHighScore(Score score){
@@ -88,7 +100,6 @@ public class Ranking {
     public List<Score> getRanking() {
         return ranking;
     }
-
 
 
     public static class Score {
